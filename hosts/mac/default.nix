@@ -20,7 +20,7 @@
   # The Linux builder — runs as a launchd daemon
   nix.linux-builder = {
     enable = true;
-    ephemeral = true;
+    ephemeral = false;
     maxJobs = 4;
     config = {
       virtualisation = {
