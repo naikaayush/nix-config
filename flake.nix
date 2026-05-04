@@ -12,20 +12,28 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
- 
-  outputs = { self, nixpkgs, nix-darwin, home-manager, ... }@inputs: {
-    darwinConfigurations.mac = nix-darwin.lib.darwinSystem {
-      system = "aarch64-darwin";
-      specialArgs = { inherit inputs; };
-      modules = [
-        ./hosts/mac
-        home-manager.darwinModules.home-manager
-        {
-          home-manager.useGlobalPkgs = true;
-          home-manager.useUserPackages = true;
-          home-manager.users.aayushnaik = import ./home/mac.nix;
-        }
-      ];
+
+  outputs =
+    {
+      self,
+      nixpkgs,
+      nix-darwin,
+      home-manager,
+      ...
+    }@inputs:
+    {
+      darwinConfigurations.mac = nix-darwin.lib.darwinSystem {
+        system = "aarch64-darwin";
+        specialArgs = { inherit inputs; };
+        modules = [
+          ./hosts/mac
+          home-manager.darwinModules.home-manager
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.users.aayushnaik = import ./home/mac.nix;
+          }
+        ];
+      };
     };
-  };
 }

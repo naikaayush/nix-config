@@ -2,14 +2,20 @@
 {
   # Required by nix-darwin
   system.stateVersion = 5;
-  nixpkgs.hostPlatform = "aarch64-darwin";  # match flake.nix
+  nixpkgs.hostPlatform = "aarch64-darwin"; # match flake.nix
 
   users.users.aayushnaik.home = "/Users/aayushnaik";
 
   # Enable flakes
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
 
-  nix.settings.trusted-users = [ "@admin" "aayushnaik" ];
+  nix.settings.trusted-users = [
+    "@admin"
+    "aayushnaik"
+  ];
 
   # The Linux builder — runs as a launchd daemon
   nix.linux-builder = {
