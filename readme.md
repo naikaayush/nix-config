@@ -1,3 +1,4 @@
+# mac
 ## bootstrap
 
 1. install nix
@@ -10,3 +11,8 @@
 
 `sudo mv /etc/bashrc /etc/bashrc.before-nix-darwin`
 `sudo mv /etc/zshrc /etc/zshrc.before-nix-darwin`
+
+
+## nixos
+
+`sudo nixos-rebuild switch --flake .#nixos`
