@@ -24,16 +24,13 @@
     LC_TIME = "en_IN";
   };
 
-  # X11 + GNOME
+  # X11 + KDE Plasma 6
   services.xserver.enable = true;
-  services.displayManager.gdm.enable = true;
-  services.desktopManager.gnome.enable = true;
-
-  services.desktopManager.gnome.extraGSettingsOverridePackages = [ pkgs.mutter ];
-  services.desktopManager.gnome.extraGSettingsOverrides = ''
-    [org.gnome.mutter]
-    experimental-features=['scale-monitor-framebuffer', 'xwayland-native-scaling']
-  '';
+  services.desktopManager.plasma6.enable = true;
+  services.displayManager.sddm = {
+    enable = true;
+    wayland.enable = true;
+  };
 
   services.xserver.xkb = {
     layout = "us";
@@ -42,6 +39,10 @@
 
   # Printing
   services.printing.enable = true;
+
+  # Bluetooth
+  hardware.bluetooth.enable = true;
+  hardware.bluetooth.powerOnBoot = true;
 
   # Audio (pipewire)
   services.pulseaudio.enable = false;
@@ -61,6 +62,36 @@
     shell = pkgs.zsh;
   };
 
+  # Cloudflare Tunnel (token-based; tunnel configured in the Zero Trust dashboard).
+  # Token is read from /etc/cloudflared/token.env, which must contain:
+  #   TUNNEL_TOKEN=<token>
+  # Create it with: sudo install -m 600 -o root -g root /dev/stdin /etc/cloudflared/token.env
+  systemd.services.cloudflared-tunnel = {
+    description = "Cloudflare Tunnel";
+    wantedBy = [ "multi-user.target" ];
+    after = [ "network-online.target" ];
+    wants = [ "network-online.target" ];
+    serviceConfig = {
+      ExecStart = "${pkgs.cloudflared}/bin/cloudflared tunnel --no-autoupdate run --token \${TUNNEL_TOKEN}";
+      EnvironmentFile = "/etc/cloudflared/token.env";
+      Restart = "on-failure";
+      RestartSec = 5;
+      DynamicUser = true;
+    };
+  };
+
+  services.openssh = {                                                                             
+      enable = true;                                                                                 
+      settings = {                                                                                   
+        PasswordAuthentication = false;
+        PermitRootLogin = "no";                                                                      
+      };          
+  };
+  users.users.naikaayush.openssh.authorizedKeys.keys = [
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBhfIUnPqmIpQPGJwXgn61f+R/dRHi4di76Ix+OJn0P5"
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKO9j5PVk/yOUe1YIpHb8mEUJl3/ewusb0NbEVfBgUst"
+  ];
+  
   # Firecracker
   boot.kernelModules = [ "kvm-amd" ];
   boot.kernel.sysctl."net.ipv4.ip_forward" = 1;
@@ -74,6 +105,8 @@
   programs.zsh.enable = true;
   programs.firefox.enable = true;
   nixpkgs.config.allowUnfree = true;
+
+  environment.systemPackages = [ pkgs.ghostty.terminfo ];
 
   # Enable flakes for `nixos-rebuild --flake`
   nix.settings.experimental-features = [ "nix-command" "flakes" ];

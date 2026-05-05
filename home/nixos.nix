@@ -31,7 +31,6 @@
   # User-level packages managed by home-manager.
   home.packages = with pkgs; [
     claude-code
-    vscode
     google-chrome
     wget
     gh
@@ -39,7 +38,17 @@
     jq
     squashfsTools
     e2fsprogs
+    redis
+    cloudflared
+    ghostty
   ];
+
+  programs.vscode = {
+    enable = true;
+    profiles.default.extensions = with pkgs.vscode-extensions; [
+      golang.go
+    ];
+  };
 
   programs.neovim = {
     enable = true;
