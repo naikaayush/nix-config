@@ -6,6 +6,17 @@
 
   home.packages = with pkgs; [
     nixfmt
+    websocat
+    wimlib
+    redis
+    rubyPackages.cocoapods
+    testdisk
+    go
+    nmap
+    terraform
+    awscli2
+    pandoc
+    protobuf
   ];
 
   programs.home-manager.enable = true;
