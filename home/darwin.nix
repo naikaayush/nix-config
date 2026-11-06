@@ -20,6 +20,17 @@
     awscli2
     pandoc
     protobuf
+
+    # dev toolchains
+    rustup
+    fnm
+    pnpm
+
+    # apps / agents
+    ghostty-bin
+    claude-code
+    codex
+    herdr
   ];
 
   # Git: name/email are mkDefault so a host can override them
@@ -70,6 +81,11 @@
       ];
       theme = "robbyrussell";
     };
+
+    # fnm: auto-switch node version from .nvmrc / .node-version on cd
+    initContent = ''
+      eval "$(${pkgs.fnm}/bin/fnm env --use-on-cd --shell zsh)"
+    '';
   };
 
   programs.home-manager.enable = true;
