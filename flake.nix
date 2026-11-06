@@ -21,19 +21,29 @@
       home-manager,
       ...
     }@inputs:
+    let
+      # Every mac = shared darwin module + its own hosts/<name> + shared home.
+      mkDarwin =
+        host:
+        nix-darwin.lib.darwinSystem {
+          specialArgs = { inherit inputs; };
+          modules = [
+            ./hosts/darwin
+            ./hosts/${host}
+            home-manager.darwinModules.home-manager
+            {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.backupFileExtension = "before-hm";
+              home-manager.users.aayushnaik = import ./home/darwin.nix;
+            }
+          ];
+        };
+    in
     {
-      darwinConfigurations.mac = nix-darwin.lib.darwinSystem {
-        system = "aarch64-darwin";
-        specialArgs = { inherit inputs; };
-        modules = [
-          ./hosts/mac
-          home-manager.darwinModules.home-manager
-          {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.users.aayushnaik = import ./home/mac.nix;
-          }
-        ];
+      darwinConfigurations = {
+        mac = mkDarwin "mac";
+        macmini = mkDarwin "macmini";
       };
 
       nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
