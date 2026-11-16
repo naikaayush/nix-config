@@ -31,6 +31,8 @@
     claude-code
     codex
     herdr
+    vscode
+    gemini-cli
   ];
 
   # Git: name/email are mkDefault so a host can override them
