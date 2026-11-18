@@ -58,7 +58,7 @@
   users.users.naikaayush = {
     isNormalUser = true;
     description = "Aayush";
-    extraGroups = [ "networkmanager" "wheel" "kvm" ];
+    extraGroups = [ "networkmanager" "wheel" "kvm" "docker" ];
     shell = pkgs.zsh;
   };
 
@@ -92,6 +92,9 @@
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKO9j5PVk/yOUe1YIpHb8mEUJl3/ewusb0NbEVfBgUst"
   ];
   
+  # Docker
+  virtualisation.docker.enable = true;
+
   # Firecracker
   boot.kernelModules = [ "kvm-amd" ];
   boot.kernel.sysctl."net.ipv4.ip_forward" = 1;
