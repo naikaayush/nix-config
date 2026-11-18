@@ -95,6 +95,14 @@
   # Docker
   virtualisation.docker.enable = true;
 
+  # Tailscale
+  services.tailscale.enable = true;
+  # Rex server's tailnet listener (see home/nixos.nix).
+  networking.firewall.interfaces.tailscale0.allowedTCPPorts = [ 7297 ];
+
+  # Keep user services (rex server) running at boot / while logged out.
+  users.users.naikaayush.linger = true;
+
   # Firecracker
   boot.kernelModules = [ "kvm-amd" ];
   boot.kernel.sysctl."net.ipv4.ip_forward" = 1;

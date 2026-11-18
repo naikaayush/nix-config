@@ -1,8 +1,18 @@
-{ config, pkgs, ... }:
+{ config, pkgs, inputs, ... }:
 {
+  imports = [ inputs.rex.homeManagerModules.default ];
+
   home.username = "naikaayush";
   home.homeDirectory = "/home/naikaayush";
   home.stateVersion = "26.05";
+
+  programs.rex.enable = true;
+  # Personal rex server (systemd user unit). Reached from the Mac via
+  # ssh://naikaayush@nixos over Tailscale. Linger is set in hosts/nixos.
+  services.rex.enable = true;
+  # Also listen on this host's tailnet IP (nixos.taile89641.ts.net:7297).
+  # The host's tailscaled identifies callers; only the node owner is admitted.
+  services.rex.extraListen = [ "tailnet://100.83.210.63:7297" ];
 
   programs.zsh = {
     enable = true;
