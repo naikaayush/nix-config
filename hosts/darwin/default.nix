@@ -24,5 +24,12 @@
 
   programs.zsh.enable = true;
 
+  # Rex: put its bin dir on PATH when set.
+  environment.interactiveShellInit = ''
+    if [ -n "$REX_BIN_DIR" ]; then
+      export PATH="$REX_BIN_DIR:$PATH"
+    fi
+  '';
+
   nixpkgs.config.allowUnfree = true;
 }
