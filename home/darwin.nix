@@ -13,17 +13,18 @@
     wimlib
     redis
     rubyPackages.cocoapods
-    testdisk
-    go
+    
     nmap
     terraform
     awscli2
-    pandoc
     protobuf
+    neovim
+
 
     # dev toolchains
     rustup
-    fnm
+    go
+    nodejs_26
     pnpm
 
     # apps / agents
@@ -32,7 +33,7 @@
     codex
     herdr
     vscode
-    gemini-cli
+    antigravity-cli
   ];
 
   # Git: name/email are mkDefault so a host can override them
@@ -83,11 +84,6 @@
       ];
       theme = "robbyrussell";
     };
-
-    # fnm: auto-switch node version from .nvmrc / .node-version on cd
-    initContent = ''
-      eval "$(${pkgs.fnm}/bin/fnm env --use-on-cd --shell zsh)"
-    '';
   };
 
   programs.home-manager.enable = true;
