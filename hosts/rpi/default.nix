@@ -64,7 +64,13 @@ in
     };
   };
 
-  services.tailscale.enable = true;
+  services.tailscale = {
+    enable = true;
+    openFirewall = true;
+  };
+
+  networking.firewall.interfaces.tailscale0.allowedTCPPorts = [ 7297 ];
+  users.users.naikaayush.linger = true;
 
   programs.zsh.enable = true;
   environment.systemPackages = with pkgs; [ git vim htop ghostty.terminfo ];

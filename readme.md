@@ -31,23 +31,50 @@ After bootstrap: `sudo darwin-rebuild switch --flake .#<host>`
 
 ## rpi (Raspberry Pi 4)
 
-Config lives in `hosts/rpi/`. The same config builds the SD image and is what you rebuild on the Pi later.
+Headless Pi 4 (2GB): SSH, Tailscale, zsh + oh-my-zsh.
 
-1. on the mac, enable the aarch64-linux builder VM once (`nix.linux-builder` in `hosts/mac`):
+- `hosts/rpi/` — system config. Also builds the SD image, so image and live system match.
+- `home/rpi.nix` — home-manager (shell, git, neovim). CLI only, no GUI apps.
+
+### build the image (on the mac)
+
+The mac builds aarch64-linux in a Linux VM (`nix.linux-builder` in `hosts/mac`). Enable it once:
 
 `sudo darwin-rebuild switch --flake .#mac`
 
-2. build the image (kernel/firmware come from the binary cache, nothing compiles):
+Then build. Kernel/firmware come from the binary cache, nothing compiles:
 
 `nix build .#packages.aarch64-linux.rpi-sd-image`
 
-3. flash it. Find the card with `diskutil list`, then (replace `diskN`):
+Output: `result/sd-image/nixos-image-sd-card-*.img.zst` (~1.5 GB, zstd-compressed).
 
-`diskutil unmountDisk /dev/diskN`
-`nix run nixpkgs#zstd -- -dc result/sd-image/*.img.zst | sudo dd of=/dev/rdiskN bs=4m`
-`diskutil eject /dev/diskN`
+### flash the SD card (on the mac)
 
-4. boot the Pi on ethernet, then `ssh naikaayush@rpi.local` and `sudo tailscale up`.
-   For wifi: `sudo nmcli device wifi connect <SSID> --ask`.
+Erases the whole card.
 
-5. later changes: clone this repo on the Pi and run `sudo nixos-rebuild switch --flake .#rpi`.
+1. find the card: `diskutil list physical`. The MacBook's slot shows as
+   "Built In SDXC Reader" (`diskutil info /dev/diskN`), marked internal but removable.
+   Never use `disk0` (the mac's SSD). Below, replace `diskN` with the card.
+2. `sudo -v` (enter password before the pipe starts)
+3. `diskutil unmountDisk /dev/diskN`
+4. `nix run nixpkgs#zstd -- -dc result/sd-image/*.img.zst | sudo dd of=/dev/rdiskN bs=4m status=progress`
+   (`rdiskN` = raw device, much faster than `diskN`)
+5. `diskutil eject /dev/diskN`
+
+"Permission denied" / "Read-only file system" → slide the card's lock switch to unlocked.
+
+### first boot
+
+1. insert card, plug in ethernet, power on. First boot grows the root partition to fill the card; give it a minute or two.
+2. `ssh naikaayush@rpi.local` (mDNS). Doesn't resolve → use the IP from the router.
+3. `sudo tailscale up`, open the login link. After that: `ssh naikaayush@rpi`.
+4. wifi (optional): `sudo nmcli device wifi connect <SSID> --ask`
+
+### updates (on the pi)
+
+Push to tangled first, then on the Pi, once:
+
+`git clone https://tangled.org/naikaayush.com/nix-config ~/nix-config`
+`sudo nixos-rebuild switch --flake ~/nix-config#rpi`
+
+After that, `update` pulls and rebuilds (alias in `home/rpi.nix`).
