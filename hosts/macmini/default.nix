@@ -17,4 +17,5 @@ in
   };
 
   users.users.aayushnaik.openssh.authorizedKeys.keys = [ keys.macbook ];
+  power.restartAfterPowerFailure = true;
 }
