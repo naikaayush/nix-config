@@ -4,6 +4,9 @@
 # and is what `nixos-rebuild switch --flake .#rpi` applies once it's running,
 # so the image and the live system never drift apart.
 { lib, pkgs, modulesPath, ... }:
+let
+  keys = import ../../keys.nix;
+in
 {
   imports = [
     # Pi firmware + U-Boot + extlinux boot, and the NIXOS_SD / FIRMWARE
@@ -37,10 +40,7 @@
     description = "Aayush";
     extraGroups = [ "networkmanager" "wheel" ];
     shell = pkgs.zsh;
-    openssh.authorizedKeys.keys = [
-      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBhfIUnPqmIpQPGJwXgn61f+R/dRHi4di76Ix+OJn0P5"
-      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKO9j5PVk/yOUe1YIpHb8mEUJl3/ewusb0NbEVfBgUst"
-    ];
+    openssh.authorizedKeys.keys = [ keys.macbook ];
   };
   # No password is set (SSH key login only), so sudo can't ask for one.
   security.sudo.wheelNeedsPassword = false;

@@ -1,4 +1,7 @@
 { pkgs, ... }:
+let
+  keys = import ../../keys.nix;
+in
 {
   imports = [ ./hardware-configuration.nix ];
 
@@ -87,10 +90,7 @@
         PermitRootLogin = "no";                                                                      
       };          
   };
-  users.users.naikaayush.openssh.authorizedKeys.keys = [
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBhfIUnPqmIpQPGJwXgn61f+R/dRHi4di76Ix+OJn0P5"
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKO9j5PVk/yOUe1YIpHb8mEUJl3/ewusb0NbEVfBgUst"
-  ];
+  users.users.naikaayush.openssh.authorizedKeys.keys = [ keys.macbook ];
   
   # Docker
   virtualisation.docker.enable = true;

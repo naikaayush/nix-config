@@ -1,5 +1,8 @@
 # Host-specific config for the Mac mini (8GB RAM). Shared bits live in ../darwin.
 { ... }:
+let
+  keys = import ../../keys.nix;
+in
 {
   # Installed with Determinate Nix, which manages the Nix daemon itself.
   nix.enable = false;
@@ -13,7 +16,5 @@
     '';
   };
 
-  users.users.aayushnaik.openssh.authorizedKeys.keys = [
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBhfIUnPqmIpQPGJwXgn61f+R/dRHi4di76Ix+OJn0P5 aayush@macbook-pro"
-  ];
+  users.users.aayushnaik.openssh.authorizedKeys.keys = [ keys.macbook ];
 }
