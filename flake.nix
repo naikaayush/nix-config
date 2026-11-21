@@ -61,5 +61,15 @@
           }
         ];
       };
+
+      # Raspberry Pi 4. Headless, no home-manager.
+      nixosConfigurations.rpi = nixpkgs.lib.nixosSystem {
+        specialArgs = { inherit inputs; };
+        modules = [ ./hosts/rpi ];
+      };
+
+      # Flashable SD card image for the Pi (needs an aarch64-linux builder):
+      #   nix build .#packages.aarch64-linux.rpi-sd-image
+      packages.aarch64-linux.rpi-sd-image = self.nixosConfigurations.rpi.config.system.build.sdImage;
     };
 }
