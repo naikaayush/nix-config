@@ -43,7 +43,7 @@
     enable = true;
     enableDefaultConfig = false;
     settings.macmini = {
-      HostName = "192.168.0.111";
+      HostName = "192.168.0.26";
       User = "aayushnaik";
     };
   };
