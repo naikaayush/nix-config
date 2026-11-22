@@ -7,6 +7,9 @@
 
   home.sessionPath = [ "$HOME/.local/bin" ];
 
+  home.file.".local/bin/rex".source = config.lib.file.mkOutOfStoreSymlink
+    "${config.home.homeDirectory}/Library/Application Support/com.superlogical.rex/RexServer/Versions/Current/Rex Server.app/Contents/MacOS/rex";
+
   home.packages = with pkgs; [
     nixfmt
     websocat
