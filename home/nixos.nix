@@ -51,6 +51,7 @@
     redis
     cloudflared
     ghostty
+    openssl
   ];
 
   programs.vscode = {

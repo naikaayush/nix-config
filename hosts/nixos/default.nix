@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 let
   keys = import ../../keys.nix;
 in
@@ -102,6 +102,23 @@ in
 
   # Keep user services (rex server) running at boot / while logged out.
   users.users.naikaayush.linger = true;
+
+  systemd.sleep.settings.Sleep = {
+    AllowSuspend = "no";
+    AllowHibernation = "no";
+    AllowHybridSleep = "no";
+    AllowSuspendThenHibernate = "no";
+  };
+
+  hardware.graphics.enable = true;
+  services.xserver.videoDrivers = [ "nvidia" ];
+  hardware.nvidia = {
+    open = true;
+    modesetting.enable = true;
+    nvidiaSettings = true;
+    package = config.boot.kernelPackages.nvidiaPackages.stable;
+  };
+  hardware.nvidia-container-toolkit.enable = true;
 
   # Firecracker
   boot.kernelModules = [ "kvm-amd" ];
