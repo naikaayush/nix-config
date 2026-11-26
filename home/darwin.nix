@@ -22,8 +22,8 @@
     awscli2
     protobuf
     neovim
-
-
+    vfkit
+    socat
     # dev toolchains
     rustup
     go

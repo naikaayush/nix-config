@@ -16,9 +16,5 @@ in
     '';
   };
 
-  users.users.aayushnaik.openssh.authorizedKeys.keys = [ keys.macbook ];
   power.restartAfterPowerFailure = true;
-
-  services.tailscale.enable = true;
-  launchd.daemons.tailscaled.serviceConfig.KeepAlive = true;
 }

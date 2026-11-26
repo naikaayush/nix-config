@@ -90,7 +90,7 @@ in
         PermitRootLogin = "no";                                                                      
       };          
   };
-  users.users.naikaayush.openssh.authorizedKeys.keys = [ keys.macbook ];
+  users.users.naikaayush.openssh.authorizedKeys.keys = [ keys.macbook keys.iphone ];
   
   # Docker
   virtualisation.docker.enable = true;

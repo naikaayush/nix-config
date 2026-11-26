@@ -40,7 +40,7 @@ in
     description = "Aayush";
     extraGroups = [ "networkmanager" "wheel" ];
     shell = pkgs.zsh;
-    openssh.authorizedKeys.keys = [ keys.macbook ];
+    openssh.authorizedKeys.keys = [ keys.macbook keys.iphone ];
   };
   # No password is set (SSH key login only), so sudo can't ask for one.
   security.sudo.wheelNeedsPassword = false;
