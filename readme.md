@@ -70,6 +70,10 @@ Erases the whole card.
 3. `sudo tailscale up`, open the login link. After that: `ssh naikaayush@rpi`.
 4. wifi (optional): `sudo nmcli device wifi connect <SSID> --ask`
 
+### wake on lan
+
+From the Pi: `wakeonlan <mac-address>`. Target must be on wired ethernet.
+
 ### updates (on the pi)
 
 Push to tangled first, then on the Pi, once:
